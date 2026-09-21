@@ -4,19 +4,19 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
-    <title>WebGIS Kesesuaian Lahan Pemukiman</title>
+    <title>WebGIS Kesesuaian Lahan Pemukiman Desa Sidodadi</title>
 
     <!-- Leaflet CSS & JS via CDN -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- Tailwind CSS untuk Layout Modern & Responsive -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Script Pustaka Bawaan qgis2web -->
     <script src="js/Autolinker.min.js"></script>
     
-    <!-- Data Spasial Kamu -->
+    <!-- Data Spasial -->
     <script src="data/ADMINISTRASI_AR_DESAKEL_1.js"></script>
     <script src="data/HASIL_2.js"></script>
 
@@ -31,7 +31,7 @@
         #map {
             width: 100%;
             height: 100%;
-            background-color: #f8fafc;
+            background-color: #1e293b;
         }
         .leaflet-tooltip.css_ADMINISTRASI_AR_DESAKEL_1 {
             background-color: rgba(0,0,0,0.7);
@@ -42,7 +42,6 @@
             padding: 2px 6px;
             border-radius: 4px;
         }
-        /* Transisi Mulus untuk Sidebar */
         #sidebar {
             transition: transform 0.3s ease-in-out;
         }
@@ -53,7 +52,6 @@
     <!-- Header WebGIS -->
     <header class="bg-emerald-800 text-white h-14 flex items-center justify-between px-4 shadow-md z-30 shrink-0">
         <div class="flex items-center space-x-3">
-            <!-- Tombol Buka/Tutup Sidebar -->
             <button onclick="toggleSidebar()" class="bg-emerald-700 hover:bg-emerald-600 p-2 rounded-lg text-white focus:outline-none flex items-center space-x-1 border border-emerald-500 shadow-sm">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -68,12 +66,11 @@
     <!-- Main Container -->
     <div class="flex flex-1 relative overflow-hidden">
         
-        <!-- Sidebar Panel (Collapsible / Buka-Tutup) -->
+        <!-- Sidebar Panel -->
         <aside id="sidebar" class="absolute lg:relative top-0 left-0 h-full w-80 bg-white border-r border-gray-200 shadow-2xl lg:shadow-none flex flex-col p-4 z-20 overflow-y-auto transform -translate-x-full lg:translate-x-0">
             
             <div class="flex items-center justify-between border-b pb-2 mb-3">
                 <h2 class="text-sm font-bold text-gray-800">Informasi & Kontrol</h2>
-                <!-- Tombol Tutup Khusus Layar HP -->
                 <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-gray-600 p-1">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -81,7 +78,7 @@
                 </button>
             </div>
             
-            <!-- Filter Dropdown Kelas Kesesuaian -->
+            <!-- Filter Dropdown -->
             <div class="mb-4">
                 <label for="classFilter" class="block text-xs font-semibold text-gray-600 mb-1">Filter Kelas Kesesuaian:</label>
                 <select id="classFilter" onchange="filterByClass()" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
@@ -92,19 +89,17 @@
                 </select>
             </div>
 
-            <!-- Ringkasan Statistik Poligon -->
+            <!-- Ringkasan Statistik -->
             <div class="mb-4 bg-gray-50 p-3 rounded-lg border border-gray-200">
                 <h3 class="text-xs font-semibold text-gray-700 mb-2">Ringkasan Legenda</h3>
                 <div id="legendContainer" class="space-y-2 text-xs text-gray-600">
-                    <!-- Diisi otomatis oleh JS -->
                 </div>
             </div>
 
-            <!-- Deskripsi Kriteria Kesesuaian Lahan -->
+            <!-- Kriteria -->
             <div class="space-y-2.5">
                 <h3 class="text-xs font-bold text-gray-800 border-b pb-1">Kriteria Kesesuaian Pemukiman</h3>
                 
-                <!-- Sangat Sesuai -->
                 <div class="p-2.5 bg-blue-50 border-l-4 border-blue-600 rounded-r shadow-sm">
                     <div class="flex items-center space-x-1.5 font-bold text-blue-900 text-xs mb-1">
                         <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
@@ -115,7 +110,6 @@
                     </p>
                 </div>
 
-                <!-- Sesuai -->
                 <div class="p-2.5 bg-yellow-50 border-l-4 border-yellow-400 rounded-r shadow-sm">
                     <div class="flex items-center space-x-1.5 font-bold text-yellow-800 text-xs mb-1">
                         <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
@@ -126,7 +120,6 @@
                     </p>
                 </div>
 
-                <!-- Tidak Sesuai -->
                 <div class="p-2.5 bg-red-50 border-l-4 border-red-600 rounded-r shadow-sm">
                     <div class="flex items-center space-x-1.5 font-bold text-red-900 text-xs mb-1">
                         <span class="w-2.5 h-2.5 rounded-full bg-red-600"></span>
@@ -139,7 +132,7 @@
             </div>
         </aside>
 
-        <!-- Overlay gelap saat sidebar terbuka di HP -->
+        <!-- Overlay Handphone -->
         <div id="sidebarOverlay" onclick="toggleSidebar()" class="hidden fixed inset-0 bg-black/40 z-10 lg:hidden"></div>
 
         <!-- Container Peta Utama -->
@@ -150,7 +143,6 @@
 
     <!-- Script Utama -->
     <script>
-        // Toggle Sidebar Buka/Tutup
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
@@ -158,32 +150,25 @@
             overlay.classList.toggle('hidden');
         }
 
-        // 1. Inisialisasi Peta - Dibuat Ringan Tanpa Animasi Lambat
+        // 1. Inisialisasi Peta
         var map = L.map('map', {
             zoomControl: true, 
-            maxZoom: 20, 
+            maxZoom: 19, 
             minZoom: 2,
-            preferCanvas: true, // Menggunakan HTML5 Canvas untuk performa rendering vector lebih ringan
+            preferCanvas: true,
             zoomAnimation: false,
             fadeAnimation: false,
             markerZoomAnimation: false
         }).fitBounds([[-5.572836535620697,105.21430279136594],[-5.532193435335974,105.26297226265915]]);
 
-        // 2. Basemap Ringan (CartoDB Positron - Sangat Ringan untuk HP & Laptop)
-        var cartoPositron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            subdomains: 'abcd',
-            maxZoom: 20
+        // 2. Basemap Esri Satellite
+        var esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+            maxZoom: 19
         }).addTo(map);
 
-        // Basemap Alternatif Tambahan (OpenStreetMap Standard)
-        var osmStandard = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap'
-        });
-
         var baseMaps = {
-            "Peta Terang (Ringan)": cartoPositron,
-            "OpenStreetMap Standard": osmStandard
+            "Esri Satellite": esriSat
         };
 
         // 3. Layer Administrasi Desa
@@ -209,9 +194,9 @@
         function style_ADMINISTRASI_AR_DESAKEL_1_0() {
             return {
                 opacity: 0.9,
-                color: '#334155',
-                weight: 1.2, 
-                dashArray: '3, 3',
+                color: '#ffffff', // Diubah ke putih agar terlihat jelas di atas citra satelit
+                weight: 1.5, 
+                dashArray: '4, 4',
                 fill: false,
                 interactive: true
             }
