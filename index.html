@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
-    <title>WebGIS Kesesuaian Lahan Pemukiman Desa Sidodadi</title>
+    <title>WebGIS Kesesuaian Lahan Pemukiman</title>
 
     <!-- Leaflet CSS & JS via CDN -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -169,13 +169,14 @@
             markerZoomAnimation: false
         }).fitBounds([[-5.572836535620697,105.21430279136594],[-5.532193435335974,105.26297226265915]]);
 
-        // 2. Basemap Ringan (CartoDB Positron)
+        // 2. Basemap Ringan (CartoDB Positron - Sangat Ringan untuk HP & Laptop)
         var cartoPositron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap &copy; CARTO',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
             subdomains: 'abcd',
             maxZoom: 20
         }).addTo(map);
 
+        // Basemap Alternatif Tambahan (OpenStreetMap Standard)
         var osmStandard = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap'
         });
