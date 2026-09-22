@@ -42,38 +42,34 @@
             padding: 2px 6px;
             border-radius: 4px;
         }
-        #sidebar {
-            transition: transform 0.3s ease-in-out;
-        }
     </style>
 </head>
 <body class="bg-gray-100 flex flex-col h-screen">
 
     <!-- Header WebGIS -->
-    <header class="bg-emerald-800 text-white h-14 flex items-center justify-between px-4 shadow-md z-30 shrink-0">
+    <header class="bg-emerald-800 text-white h-14 flex items-center justify-between px-4 shadow-md shrink-0 relative z-[9999]">
         <div class="flex items-center space-x-3">
-            <button onclick="toggleSidebar()" class="bg-emerald-700 hover:bg-emerald-600 p-2 rounded-lg text-white focus:outline-none flex items-center space-x-1 border border-emerald-500 shadow-sm">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <!-- Tombol Toggle Panel -->
+            <button id="btnToggleSidebar" type="button" class="bg-emerald-700 hover:bg-emerald-600 active:bg-emerald-900 px-3 py-2 rounded-lg text-white focus:outline-none flex items-center space-x-2 border border-emerald-500 shadow-sm cursor-pointer relative z-[10000]">
+                <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
-                <span class="text-xs font-semibold hidden sm:inline">Panel / Legenda</span>
+                <span class="text-xs font-semibold pointer-events-none">Panel / Legenda</span>
             </button>
-            <!-- Judul Diperbarui -->
             <h1 class="text-sm sm:text-base font-bold tracking-wide truncate">Kesesuaian Lahan Pemukiman Desa Sidodadi 2026</h1>
         </div>
-        <!-- Keterangan Kelompok Diperbarui -->
         <span class="text-[10px] sm:text-xs bg-emerald-900 px-2.5 py-1 rounded-full border border-emerald-600/50">Dibuat oleh Kelompok 10</span>
     </header>
 
     <!-- Main Container -->
     <div class="flex flex-1 relative overflow-hidden">
         
-        <!-- Sidebar Panel -->
-        <aside id="sidebar" class="absolute lg:relative top-0 left-0 h-full w-80 bg-white border-r border-gray-200 shadow-2xl lg:shadow-none flex flex-col p-4 z-20 overflow-y-auto transform -translate-x-full lg:translate-x-0">
+        <!-- Sidebar Panel (Secara default tersembunyi dengan class 'hidden', saat aktif akan terbuka) -->
+        <aside id="sidebar" class="hidden absolute top-0 left-0 h-full w-80 bg-white border-r border-gray-200 shadow-2xl flex-col p-4 z-[9998] overflow-y-auto">
             
             <div class="flex items-center justify-between border-b pb-2 mb-3">
                 <h2 class="text-sm font-bold text-gray-800">Informasi & Kontrol</h2>
-                <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-gray-600 p-1">
+                <button id="btnCloseSidebar" type="button" class="text-gray-400 hover:text-gray-600 p-1 cursor-pointer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
@@ -134,33 +130,40 @@
             </div>
         </aside>
 
-        <!-- Overlay Handphone -->
-        <div id="sidebarOverlay" onclick="toggleSidebar()" class="hidden fixed inset-0 bg-black/40 z-10 lg:hidden"></div>
-
         <!-- Container Peta Utama -->
         <main class="flex-1 relative h-full w-full">
             <div id="map"></div>
         </main>
     </div>
 
-    <!-- Script Utama -->
+    <!-- Script Kontrol Sidebar & Map -->
     <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            sidebar.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
-        }
+        // Memastikan Event Listener Sidebar Terikat Setelah DOM Siap
+        document.addEventListener('DOMContentLoaded', function() {
+            var btnToggle = document.getElementById('btnToggleSidebar');
+            var btnClose = document.getElementById('btnCloseSidebar');
+            var sidebar = document.getElementById('sidebar');
+
+            function toggle() {
+                if (sidebar.classList.contains('hidden')) {
+                    sidebar.classList.remove('hidden');
+                    sidebar.classList.add('flex');
+                } else {
+                    sidebar.classList.remove('flex');
+                    sidebar.classList.add('hidden');
+                }
+            }
+
+            if (btnToggle) btnToggle.addEventListener('click', toggle);
+            if (btnClose) btnClose.addEventListener('click', toggle);
+        });
 
         // 1. Inisialisasi Peta
         var map = L.map('map', {
             zoomControl: true, 
             maxZoom: 19, 
             minZoom: 2,
-            preferCanvas: true,
-            zoomAnimation: false,
-            fadeAnimation: false,
-            markerZoomAnimation: false
+            preferCanvas: true
         }).fitBounds([[-5.572836535620697,105.21430279136594],[-5.532193435335974,105.26297226265915]]);
 
         // 2. Basemap Esri Satellite
